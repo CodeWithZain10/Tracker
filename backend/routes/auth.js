@@ -13,7 +13,8 @@ const generateToken = (id) => {
 // @route   POST /auth/login
 // @access  Public
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const email = req.body.email ? req.body.email.toLowerCase().trim() : '';
+    const password = req.body.password ? req.body.password.trim() : '';
     console.log(`Login attempt for: ${email}`);
 
     try {

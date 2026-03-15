@@ -52,8 +52,8 @@ const PORT = process.env.PORT || 5000;
 // Connect to database and seed admin before starting the server
 connectDB().then(async () => {
     try {
-        const adminEmail = process.env.ADMIN_EMAIL || 'admin@byteslimited.com';
-        const adminPassword = process.env.ADMIN_PASSWORD || 'bytes@123';
+        const adminEmail = (process.env.ADMIN_EMAIL || 'admin@byteslimited.com').toLowerCase().trim();
+        const adminPassword = (process.env.ADMIN_PASSWORD || 'bytes@123').trim();
         const User = require('./models/User');
         
         let admin = await User.findOne({ email: adminEmail });
