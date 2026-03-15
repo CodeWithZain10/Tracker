@@ -40,7 +40,8 @@ app.get('/health', async (req, res) => {
             status: 'up',
             database: dbStatus,
             adminUserExists: adminCount > 0,
-            adminCount: adminCount
+            adminCount: adminCount,
+            adminEmail: (process.env.ADMIN_EMAIL || 'admin@byteslimited.com').toLowerCase().trim()
         });
     } catch (error) {
         res.status(500).json({ status: 'down', error: error.message });
@@ -74,7 +75,7 @@ connectDB().then(async () => {
             console.log(`Admin password updated for: ${adminEmail}`);
         }
     } catch (seedError) {
-        console.error('Auto-seeding failed:', seedError.message);
+        console.error(`Auto-seeding failed for ${adminEmail}:`, seedError.message);
     }
     
     app.listen(PORT, console.log(`Server running on port ${PORT}`));
