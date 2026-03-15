@@ -7,7 +7,22 @@ const connectDB = require('./config/db');
 dotenv.config();
 
 // Connect to database
-connectDB();
+connectDB().then(async () => {
+    // Auto-seed admin if it doesn't exist
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@byteslimited.com';
+    const User = require('./models/User');
+    const adminExists = await User.findOne({ role: 'admin' });
+    if (!adminExists) {
+        console.log('No admin found, seeding default admin...');
+        await User.create({
+            name: 'Admin',
+            email: adminEmail,
+            password: process.env.ADMIN_PASSWORD || 'bytes@123',
+            role: 'admin'
+        });
+        console.log(`Admin created: ${adminEmail}`);
+    }
+});
 
 const authRoutes = require('./routes/auth');
 const memberRoutes = require('./routes/members');
