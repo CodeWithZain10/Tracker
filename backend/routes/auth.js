@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
 
         if (!user) {
             console.log(`Login failed: User ${email} not found`);
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({ message: 'Email not registered' });
         }
 
         const isMatch = await user.matchPassword(password);
@@ -37,7 +37,7 @@ router.post('/login', async (req, res) => {
             });
         } else {
             console.log(`Login failed: Incorrect password for ${email}`);
-            res.status(401).json({ message: 'Invalid email or password' });
+            res.status(401).json({ message: 'Incorrect password' });
         }
     } catch (error) {
         console.error(`Login error for ${email}:`, error);
