@@ -53,19 +53,25 @@ const PORT = process.env.PORT || 5000;
 connectDB().then(async () => {
     try {
         const adminEmail = process.env.ADMIN_EMAIL || 'admin@byteslimited.com';
+        const adminPassword = process.env.ADMIN_PASSWORD || 'bytes@123';
         const User = require('./models/User');
-        const adminExists = await User.findOne({ role: 'admin' });
-        if (!adminExists) {
+        
+        let admin = await User.findOne({ email: adminEmail });
+        
+        if (!admin) {
             console.log('No admin found, seeding default admin...');
-            await User.create({
+            admin = await User.create({
                 name: 'Admin',
                 email: adminEmail,
-                password: process.env.ADMIN_PASSWORD || 'bytes@123',
+                password: adminPassword,
                 role: 'admin'
             });
             console.log(`Admin created successfully: ${adminEmail}`);
         } else {
-            console.log(`Admin already exists: ${adminExists.email}`);
+            console.log(`Admin already exists. Updating password to ensure it matches environment...`);
+            admin.password = adminPassword;
+            await admin.save();
+            console.log(`Admin password updated for: ${adminEmail}`);
         }
     } catch (seedError) {
         console.error('Auto-seeding failed:', seedError.message);
