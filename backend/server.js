@@ -55,10 +55,10 @@ app.get('/health', async (req, res) => {
     try {
         const mongoose = require('mongoose');
         const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
-        
+
         const User = require('./models/User');
         const adminCount = await User.countDocuments({ role: 'admin' });
-        
+
         res.json({
             status: 'up',
             database: dbStatus,
