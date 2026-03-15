@@ -8,19 +8,24 @@ dotenv.config();
 
 // Connect to database
 connectDB().then(async () => {
-    // Auto-seed admin if it doesn't exist
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@byteslimited.com';
-    const User = require('./models/User');
-    const adminExists = await User.findOne({ role: 'admin' });
-    if (!adminExists) {
-        console.log('No admin found, seeding default admin...');
-        await User.create({
-            name: 'Admin',
-            email: adminEmail,
-            password: process.env.ADMIN_PASSWORD || 'bytes@123',
-            role: 'admin'
-        });
-        console.log(`Admin created: ${adminEmail}`);
+    try {
+        const adminEmail = process.env.ADMIN_EMAIL || 'admin@byteslimited.com';
+        const User = require('./models/User');
+        const adminExists = await User.findOne({ role: 'admin' });
+        if (!adminExists) {
+            console.log('No admin found, seeding default admin...');
+            const newAdmin = await User.create({
+                name: 'Admin',
+                email: adminEmail,
+                password: process.env.ADMIN_PASSWORD || 'bytes@123',
+                role: 'admin'
+            });
+            console.log(`Admin created successfully: ${adminEmail}`);
+        } else {
+            console.log(`Admin already exists: ${adminExists.email}`);
+        }
+    } catch (seedError) {
+        console.error('Auto-seeding failed:', seedError.message);
     }
 });
 
@@ -44,6 +49,25 @@ app.use('/tasks', taskRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');
+});
+
+app.get('/health', async (req, res) => {
+    try {
+        const mongoose = require('mongoose');
+        const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+        
+        const User = require('./models/User');
+        const adminCount = await User.countDocuments({ role: 'admin' });
+        
+        res.json({
+            status: 'up',
+            database: dbStatus,
+            adminUserExists: adminCount > 0,
+            adminCount: adminCount
+        });
+    } catch (error) {
+        res.status(500).json({ status: 'down', error: error.message });
+    }
 });
 
 const PORT = process.env.PORT || 5000;
