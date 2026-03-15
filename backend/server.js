@@ -7,6 +7,8 @@ const connectDB = require('./config/db');
 dotenv.config();
 
 // Connect to database
+const PORT = process.env.PORT || 5000;
+
 connectDB().then(async () => {
     try {
         const adminEmail = process.env.ADMIN_EMAIL || 'admin@byteslimited.com';
@@ -14,7 +16,7 @@ connectDB().then(async () => {
         const adminExists = await User.findOne({ role: 'admin' });
         if (!adminExists) {
             console.log('No admin found, seeding default admin...');
-            const newAdmin = await User.create({
+            await User.create({
                 name: 'Admin',
                 email: adminEmail,
                 password: process.env.ADMIN_PASSWORD || 'bytes@123',
@@ -27,49 +29,7 @@ connectDB().then(async () => {
     } catch (seedError) {
         console.error('Auto-seeding failed:', seedError.message);
     }
+    
+    app.listen(PORT, console.log(`Server running on port ${PORT}`));
 });
 
-const authRoutes = require('./routes/auth');
-const memberRoutes = require('./routes/members');
-const taskRoutes = require('./routes/tasks');
-
-const app = express();
-
-// Middleware
-app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    credentials: true
-}));
-app.use(express.json());
-
-// Routes
-app.use('/auth', authRoutes);
-app.use('/members', memberRoutes);
-app.use('/tasks', taskRoutes);
-
-app.get('/', (req, res) => {
-    res.send('API is running...');
-});
-
-app.get('/health', async (req, res) => {
-    try {
-        const mongoose = require('mongoose');
-        const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
-
-        const User = require('./models/User');
-        const adminCount = await User.countDocuments({ role: 'admin' });
-
-        res.json({
-            status: 'up',
-            database: dbStatus,
-            adminUserExists: adminCount > 0,
-            adminCount: adminCount
-        });
-    } catch (error) {
-        res.status(500).json({ status: 'down', error: error.message });
-    }
-});
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, console.log(`Server running on port ${PORT}`));
