@@ -1,0 +1,194 @@
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.page-header h1 {
+    font-size: 2rem;
+    color: var(--text-main);
+    margin-bottom: 4px;
+}
+
+.page-header p {
+    color: var(--text-secondary);
+}
+
+.add-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.add-btn:hover {
+    background-color: #1557b0;
+}
+
+.members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.member-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.member-info {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.member-avatar-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 auto 16px;
+}
+
+.member-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 4px;
+}
+
+.member-info p {
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.platform-badge {
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 0 4px;
+}
+
+.platform-badge.facebook { background-color: #e8f0fe; color: #1877f2; }
+.platform-badge.linkedin { background-color: #e6fffa; color: #0a66c2; }
+
+.member-stats-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.platform-stat h4 {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+}
+
+.member-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.action-btn.stats { background-color: #f1f3f4; color: var(--text-main); }
+.action-btn.stats:hover { background-color: #e8eaed; }
+.action-btn.delete { flex: 0 0 44px; background-color: #fff5f5; color: #ea4335; }
+.action-btn.delete:hover { background-color: #fee2e2; }
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.close-btn {
+    background: none;
+    color: var(--text-secondary);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-top: 24px;
+}
+
+.stats-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.platform-section h3 {
+    font-size: 1rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid;
+}
+
+.platform-section.fb h3 { border-color: #1877f2; color: #1877f2; }
+.platform-section.li h3 { border-color: #0a66c2; color: #0a66c2; }

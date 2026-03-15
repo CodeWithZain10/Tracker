@@ -1,0 +1,19 @@
+.layout-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    padding: 32px;
+    background-color: var(--bg-color);
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+        margin-top: 60px; /* Space for mobile header if added */
+    }
+}
