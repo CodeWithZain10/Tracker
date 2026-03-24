@@ -20,14 +20,25 @@ router.get('/', protect, async (req, res) => {
         { $set: { status: 'Overdue' } }
     );
 
+    const { member, status, priority } = req.query;
+    const query = {};
+
     if (req.user.role === 'admin') {
-        tasks = await Task.find({}).populate({
+        if (member) query.assignedTo = member;
+        if (status) query.status = status;
+        if (priority) query.priority = priority;
+
+        tasks = await Task.find(query).populate({
             path: 'assignedTo',
             populate: { path: 'user', select: 'name' }
-        });
+        }).sort({ dueDate: 1 });
     } else {
-        const member = await Member.findOne({ user: req.user._id });
-        tasks = await Task.find({ assignedTo: member._id });
+        const memberDoc = await Member.findOne({ user: req.user._id });
+        query.assignedTo = memberDoc._id;
+        if (status) query.status = status;
+        if (priority) query.priority = priority;
+
+        tasks = await Task.find(query).sort({ dueDate: 1 });
     }
     res.json(tasks);
 });
@@ -36,7 +47,7 @@ router.get('/', protect, async (req, res) => {
 // @route   POST /tasks
 // @access  Private/Admin
 router.post('/', protect, admin, async (req, res) => {
-    const { title, assignedTo, platform, dueDate, targetNumber, unit, notes } = req.body;
+    const { title, assignedTo, platform, dueDate, targetNumber, unit, notes, priority } = req.body;
 
     const task = await Task.create({
         title,
@@ -46,7 +57,8 @@ router.post('/', protect, admin, async (req, res) => {
         targetNumber,
         unit,
         notes,
-        status: 'Pending',
+        priority: priority || 'Medium',
+        status: 'To Do',
         progress: 0
     });
 

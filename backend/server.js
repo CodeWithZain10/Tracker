@@ -15,8 +15,21 @@ const metricRoutes = require('./routes/metrics');
 const app = express();
 
 // Middleware
+const allowedOrigins = [
+    'https://tracker-eight-olive.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175'
+];
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            return callback(null, true); // Fallback to allow for now during dev
+        }
+        return callback(null, true);
+    },
     credentials: true
 }));
 app.use(express.json());
