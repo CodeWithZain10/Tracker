@@ -9,6 +9,8 @@ dotenv.config();
 const authRoutes = require('./routes/auth');
 const memberRoutes = require('./routes/members');
 const taskRoutes = require('./routes/tasks');
+const updateRoutes = require('./routes/updates');
+const metricRoutes = require('./routes/metrics');
 
 const app = express();
 
@@ -23,6 +25,8 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/members', memberRoutes);
 app.use('/tasks', taskRoutes);
+app.use('/updates', updateRoutes);
+app.use('/metrics', metricRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');
@@ -32,10 +36,10 @@ app.get('/health', async (req, res) => {
     try {
         const mongoose = require('mongoose');
         const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
-        
+
         const User = require('./models/User');
         const adminCount = await User.countDocuments({ role: 'admin' });
-        
+
         res.json({
             status: 'up',
             database: dbStatus,
@@ -56,9 +60,9 @@ connectDB().then(async () => {
         const adminEmail = (process.env.ADMIN_EMAIL || 'admin@byteslimited.com').toLowerCase().trim();
         const adminPassword = (process.env.ADMIN_PASSWORD || 'bytes@123').trim();
         const User = require('./models/User');
-        
+
         let admin = await User.findOne({ email: adminEmail });
-        
+
         if (!admin) {
             console.log('No admin found, seeding default admin...');
             admin = await User.create({
@@ -77,7 +81,7 @@ connectDB().then(async () => {
     } catch (seedError) {
         console.error(`Auto-seeding failed for ${adminEmail}:`, seedError.message);
     }
-    
+
     app.listen(PORT, console.log(`Server running on port ${PORT}`));
 }).catch(err => {
     console.error('Failed to connect to DB:', err.message);

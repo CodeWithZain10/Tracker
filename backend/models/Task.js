@@ -16,6 +16,12 @@ const taskSchema = mongoose.Schema({
         enum: ['Facebook', 'LinkedIn', 'General'],
         default: 'General'
     },
+    priority: {
+        type: String,
+        required: true,
+        enum: ['High', 'Medium', 'Low'],
+        default: 'Medium'
+    },
     dueDate: {
         type: Date,
         required: true
@@ -35,8 +41,8 @@ const taskSchema = mongoose.Schema({
     status: {
         type: String,
         required: true,
-        enum: ['Pending', 'In Progress', 'Done', 'Overdue'],
-        default: 'Pending'
+        enum: ['To Do', 'In Progress', 'Review', 'Done'],
+        default: 'To Do'
     },
     progress: {
         type: Number,
