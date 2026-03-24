@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
-import { 
-    Plus, 
-    Filter, 
-    Calendar, 
-    Target, 
-    CheckSquare, 
+import {
+    Plus,
+    Filter,
+    Calendar,
+    Target,
+    CheckSquare,
     Square,
     Facebook,
     Linkedin,
@@ -36,7 +36,7 @@ const Tasks: React.FC = () => {
     const [members, setMembers] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [showAddForm, setShowAddForm] = useState(false);
-    
+
     // Filters
     const [filterStatus, setFilterStatus] = useState('All');
     const [filterPlatform, setFilterPlatform] = useState('All');
@@ -178,7 +178,7 @@ const Tasks: React.FC = () => {
                             </div>
                             <span className={`status-badge ${task.status.toLowerCase()}`}>{task.status}</span>
                         </div>
-                        
+
                         <div className="task-details">
                             <div className="detail-item">
                                 <Calendar size={16} />
@@ -204,9 +204,9 @@ const Tasks: React.FC = () => {
                                 <span>{Math.round((task.progress / task.targetNumber) * 100)}%</span>
                             </div>
                             <div className="progress-bar-bg">
-                                <div 
-                                    className="progress-bar-fill" 
-                                    style={{ 
+                                <div
+                                    className="progress-bar-fill"
+                                    style={{
                                         width: `${Math.min(100, (task.progress / task.targetNumber) * 100)}%`,
                                         backgroundColor: task.platform === 'Facebook' ? 'var(--fb-blue)' : task.platform === 'LinkedIn' ? 'var(--li-green)' : 'var(--primary-color)'
                                     }}
@@ -216,7 +216,7 @@ const Tasks: React.FC = () => {
 
                         <div className="task-actions">
                             <div className="completion-controls">
-                                <button 
+                                <button
                                     className={`checkbox-btn ${task.isCompleted ? 'checked' : ''}`}
                                     onClick={() => handleUpdateProgress(task._id, task.progress, !task.isCompleted)}
                                 >
@@ -224,9 +224,9 @@ const Tasks: React.FC = () => {
                                     <span>Done</span>
                                 </button>
                                 <div className="number-input">
-                                    <input 
-                                        type="number" 
-                                        value={task.progress} 
+                                    <input
+                                        type="number"
+                                        value={task.progress}
                                         max={task.targetNumber}
                                         min={0}
                                         onChange={(e) => handleUpdateProgress(task._id, parseInt(e.target.value) || 0)}
@@ -255,19 +255,19 @@ const Tasks: React.FC = () => {
                         <form onSubmit={handleAddTask}>
                             <div className="form-group">
                                 <label>Task Title</label>
-                                <input type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} placeholder="e.g. 10 clients ko Facebook pe approach karo" />
+                                <input type="text" required value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} placeholder="e.g. approach 10 clients" />
                             </div>
                             <div className="form-row">
                                 <div className="form-group">
                                     <label>Assigned To</label>
-                                    <select required value={formData.assignedTo} onChange={e => setFormData({...formData, assignedTo: e.target.value})}>
+                                    <select required value={formData.assignedTo} onChange={e => setFormData({ ...formData, assignedTo: e.target.value })}>
                                         <option value="">Select Member</option>
                                         {members.map(m => <option key={m._id} value={m._id}>{m.user.name}</option>)}
                                     </select>
                                 </div>
                                 <div className="form-group">
                                     <label>Platform</label>
-                                    <select value={formData.platform} onChange={e => setFormData({...formData, platform: e.target.value as any})}>
+                                    <select value={formData.platform} onChange={e => setFormData({ ...formData, platform: e.target.value as any })}>
                                         <option value="General">General</option>
                                         <option value="Facebook">Facebook</option>
                                         <option value="LinkedIn">LinkedIn</option>
@@ -277,20 +277,20 @@ const Tasks: React.FC = () => {
                             <div className="form-row">
                                 <div className="form-group">
                                     <label>Due Date</label>
-                                    <input type="date" required value={formData.dueDate} onChange={e => setFormData({...formData, dueDate: e.target.value})} />
+                                    <input type="date" required value={formData.dueDate} onChange={e => setFormData({ ...formData, dueDate: e.target.value })} />
                                 </div>
                                 <div className="form-group">
                                     <label>Target Number</label>
-                                    <input type="number" required value={formData.targetNumber} onChange={e => setFormData({...formData, targetNumber: parseInt(e.target.value)})} />
+                                    <input type="number" required value={formData.targetNumber} onChange={e => setFormData({ ...formData, targetNumber: parseInt(e.target.value) })} />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label>Unit</label>
-                                <input type="text" value={formData.unit} onChange={e => setFormData({...formData, unit: e.target.value})} placeholder="e.g. clients, posts" />
+                                <input type="text" value={formData.unit} onChange={e => setFormData({ ...formData, unit: e.target.value })} placeholder="e.g. clients, posts" />
                             </div>
                             <div className="form-group">
                                 <label>Notes</label>
-                                <textarea value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})}></textarea>
+                                <textarea value={formData.notes} onChange={e => setFormData({ ...formData, notes: e.target.value })}></textarea>
                             </div>
                             <button type="submit" className="submit-btn">Assign Task</button>
                         </form>
